@@ -7,6 +7,7 @@ export class createUsersTable1677588102183 implements MigrationInterface {
         id serial PRIMARY KEY,
         username varchar NOT NULL DEFAULT '',
         password varchar NOT NULL DEFAULT '',
+        "refreshToken" varchar DEFAULT '',
         CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710" UNIQUE (username)
       );
     `);
