@@ -1,4 +1,4 @@
-import { IUsers } from 'src/users/users.interface';
+import { IUsers } from '../users/users.interface';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -20,4 +20,9 @@ export class Users implements IUsers {
     default: '',
   })
   password: string;
+
+  @Column({
+    default: '',
+  })
+  refreshToken: string;
 }
