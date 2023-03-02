@@ -101,4 +101,10 @@ export class AuthService {
       accessToken: token,
     };
   }
+
+  validateToken(jwt: string) {
+    return this.jwtService.verify(jwt, {
+      secret: this.configService.get('JWT_ACCESS_SECRET'),
+    });
+  }
 }
