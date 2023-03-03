@@ -18,6 +18,8 @@ async function bootstrap() {
     },
   });
 
+  app.enableCors();
+
   await app.startAllMicroservices();
   await app.listen(port);
   Logger.log(`AUTH microservice is running on port ${microservicePort}`);
