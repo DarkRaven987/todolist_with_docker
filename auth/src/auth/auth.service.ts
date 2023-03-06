@@ -20,13 +20,11 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto): Promise<any> {
     const hash = hashData(createUserDto.password);
-    const newUser = await this.usersService.create({
+    await this.usersService.create({
       ...createUserDto,
       password: hash,
     });
-    const tokens = await this.getTokens(newUser.id, newUser.username);
-    await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-    return tokens;
+    return { message: 'OK' };
   }
 
   async signIn(data: AuthDto) {
@@ -37,7 +35,9 @@ export class AuthService {
       throw new BadRequestException('Password is incorrect');
     const tokens = await this.getTokens(user.id, user.username);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
-    return tokens;
+    delete user.password;
+    delete user.refreshToken;
+    return { user, ...tokens };
   }
 
   async logout(userId: number) {
