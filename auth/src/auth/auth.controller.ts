@@ -7,23 +7,27 @@ import {
   Post,
   Req,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request } from 'express';
-import { AuthDto, ValidateDto } from './dtos/auth.dto';
+import { AuthDto, authUserSchema, ValidateDto } from './dtos/auth.dto';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { MessagePattern } from '@nestjs/microservices';
+import { JoiValidationPipe } from 'src/pipes/joi.pipe';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('signup')
+  @UsePipes(new JoiValidationPipe(authUserSchema))
   signup(@Body() createUserDto: AuthDto) {
     return this.authService.signUp(createUserDto);
   }
 
   @Post('signin')
+  @UsePipes(new JoiValidationPipe(authUserSchema))
   signin(@Body() data: AuthDto) {
     return this.authService.signIn(data);
   }
