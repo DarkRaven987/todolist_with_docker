@@ -1,0 +1,12 @@
+.text-field .v-field__loader {
+  width: fit-content;
+  top: 30%;
+  right: 20px;
+  left: unset;
+}
+
+.text-field .v-input__details {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  color: rgb(176, 0, 32);
+}

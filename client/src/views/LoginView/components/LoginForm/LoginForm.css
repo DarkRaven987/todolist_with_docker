@@ -1,0 +1,13 @@
+.login-form-container {
+  width: 30%;
+  min-width: 400px;
+  min-height: 360px;
+  background-color: lightgray;
+  margin: 0 auto;
+}
+
+.form-title {
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+}
