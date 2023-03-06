@@ -21,12 +21,15 @@ import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { MessagePattern } from '@nestjs/microservices';
 import { JoiValidationPipe } from 'src/pipes/joi.pipe';
 import { UsersService } from 'src/users/users.service';
+import { AccessTokenGuard } from './guards/accessToken.guard';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   @Post('signup')
@@ -41,10 +44,13 @@ export class AuthController {
     return this.authService.signIn(data);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {
-    if (!req?.user) throw new ForbiddenException();
-    this.authService.logout(req.user['sub']);
+    const currUserToken = req.headers.authorization;
+    const currUserData = this.jwtService.decode(currUserToken.split(' ')[1]);
+    if (!currUserData) throw new ForbiddenException();
+    this.authService.logout(currUserData['sub']);
   }
 
   @UseGuards(RefreshTokenGuard)
