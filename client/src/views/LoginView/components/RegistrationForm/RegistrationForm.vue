@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import debounce from 'lodash/debounce';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
 import { authAgent } from '../../../../utils/agent';
-import { AUTH_FORM } from '../../../../utils/consts';
+import { AUTH_FORM, passwordRegExp } from '../../../../utils/consts';
 
 const props = defineProps({
   handleFormChange: Function,
@@ -11,6 +12,9 @@ const props = defineProps({
 const username = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+
+const showIsUniqueUsernameError = ref(false);
+const isLoadingUsernameCheck = ref(false);
 
 const usernameFieldRules = [
   (value) => {
@@ -23,7 +27,8 @@ const usernameFieldRules = [
 const passwordFieldRules = [
   (value) => {
     if (!value) return 'Field is requried';
-    if (value.length < 8) return 'Username should contain at least 8 symbols';
+    if (!passwordRegExp.test(value))
+      return 'Length should be at least 8 symbols containing upper and lower case letters, numbers and special symbols';
     return true;
   },
 ];
@@ -37,7 +42,20 @@ const confirmPasswordFieldRules = [
   },
 ];
 
+const debounceNameCheck = debounce(() => {
+  if (username.value) {
+    isLoadingUsernameCheck.value = true;
+    authAgent
+      .post('/auth/checkUsername', { username: username.value })
+      .then(({ data }) => {
+        showIsUniqueUsernameError.value = !data.isUnique;
+      })
+      .finally(() => (isLoadingUsernameCheck.value = false));
+  }
+}, 2000);
+
 const handleNewUsernameChange = (event) => {
+  debounceNameCheck();
   username.value = event.target.value;
 };
 
@@ -50,15 +68,32 @@ const handleConfirmPasswordChange = (event) => {
 };
 
 const formSubmit = () => {
-  authAgent
-    .post('/auth/signup', {
-      username: username.value,
-      password: password.value,
-    })
-    .then(() => {
-      props.handleFormChange(AUTH_FORM.LOGIN);
-    });
+  if (isFormValid.value) {
+    authAgent
+      .post('/auth/signup', {
+        username: username.value,
+        password: password.value,
+      })
+      .then(() => {
+        props.handleFormChange(AUTH_FORM.LOGIN);
+      });
+  }
 };
+
+const isUniqueUsernameErrorMessage = computed(() => {
+  return showIsUniqueUsernameError.value
+    ? ['Entered username is being used']
+    : [];
+});
+
+const isFormValid = computed(() => {
+  return (
+    username.value &&
+    password.value &&
+    confirmPassword.value &&
+    !showIsUniqueUsernameError.value
+  );
+});
 </script>
 
 <template>
@@ -75,14 +110,18 @@ const formSubmit = () => {
         :value="username"
         :rules="usernameFieldRules"
         @input="handleNewUsernameChange"
+        :errorMessages="isUniqueUsernameErrorMessage"
+        :loading="isLoadingUsernameCheck"
       />
       <FormInput
+        class="mb-6"
         id="new_password"
         label="New password"
         type="password"
         :value="password"
         :rules="passwordFieldRules"
         @input="handleNewPasswordChange"
+        :errorMessages="apiErrorMessages"
       />
       <FormInput
         id="confirm_password"
@@ -91,9 +130,10 @@ const formSubmit = () => {
         :value="confirmPassword"
         :rules="confirmPasswordFieldRules"
         @input="handleConfirmPasswordChange"
+        :errorMessages="apiErrorMessages"
       />
       <v-row class="mt-10">
-        <v-btn type="submit" block class="">Sign Up</v-btn>
+        <v-btn type="submit" block>Sign Up</v-btn>
       </v-row>
 
       <v-row class="mt-10 justify-center">

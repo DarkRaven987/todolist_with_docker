@@ -6,21 +6,38 @@ defineProps({
   value: String,
   onChange: Function,
   rules: Object,
+  errorMessages: Object,
+  loading: Boolean,
 });
 </script>
 
 <template>
   <v-row class="form-input-container">
     <v-text-field
+      class="text-field"
+      variant="outlined"
       :id="id"
       :type="type"
       :label="label"
       :value="value"
       :rules="rules"
       v-on:input="$emit('input', $event)"
-      variant="outlined"
-    />
+      :error-messages="errorMessages"
+    >
+      <template v-slot:loader>
+        <v-progress-circular
+          v-if="loading"
+          class="circular-loader"
+          color="primary"
+          width="3"
+          size="20"
+          absolute
+          indeterminate
+        >
+        </v-progress-circular>
+      </template>
+    </v-text-field>
   </v-row>
 </template>
 
-<style src="./FormInput.css" scoped></style>
+<style src="./FormInput.css"></style>

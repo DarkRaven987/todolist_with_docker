@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
 import { useUserStore } from '../../../../stores/user';
 import { authAgent } from '../../../../utils/agent';
-import { AUTH_FORM } from '../../../../utils/consts';
+import { AUTH_FORM, passwordRegExp } from '../../../../utils/consts';
 
 defineProps({
   handleFormChange: Function,
@@ -15,34 +15,57 @@ const router = useRouter();
 
 const username = ref('');
 const password = ref('');
-const requiredRule = [
+const displayAPIError = ref(false);
+
+const usernameRules = [
   (value) => {
     if (!value) return 'Field is requried';
+    if (value.length < 4) return 'Username should contain at least 4 symbols';
+    return true;
+  },
+];
+
+const passwordRules = [
+  (value) => {
+    if (!value) return 'Field is requried';
+    if (!passwordRegExp.test(value))
+      return 'Length should be at least 8 symbols containing upper and lower case letters, numbers and special symbols';
     return true;
   },
 ];
 
 const handleUsernameChange = (event) => {
+  if (displayAPIError.value) displayAPIError.value = false;
   username.value = event.target.value;
 };
 
 const handlePasswordChange = (event) => {
+  if (displayAPIError.value) displayAPIError.value = false;
   password.value = event.target.value;
 };
 
 const formSubmit = () => {
-  authAgent
-    .post('/auth/signin', {
-      username: username.value,
-      password: password.value,
-    })
-    .then(({ data }) => {
-      userStore.setUserData(data?.user);
-      localStorage.setItem('accessToken', `Bearer ${data.accessToken}`);
-      localStorage.setItem('refreshToken', `Bearer ${data.refreshToken}`);
-      router.push('/dashboard');
-    });
+  if (username.value && password.value) {
+    authAgent
+      .post('/auth/signin', {
+        username: username.value,
+        password: password.value,
+      })
+      .then(({ data }) => {
+        userStore.setUserData(data?.user);
+        localStorage.setItem('accessToken', `Bearer ${data.accessToken}`);
+        localStorage.setItem('refreshToken', `Bearer ${data.refreshToken}`);
+        router.push('/dashboard');
+      })
+      .catch(() => {
+        displayAPIError.value = true;
+      });
+  }
 };
+
+const apiErrorMessages = computed(() => {
+  return displayAPIError.value ? ['Username or password is invalid'] : [];
+});
 </script>
 
 <template>
@@ -57,16 +80,18 @@ const formSubmit = () => {
         label="Username"
         type="text"
         :value="username"
-        :rules="requiredRule"
+        :rules="usernameRules"
         @input="handleUsernameChange"
+        :errorMessages="apiErrorMessages"
       />
       <FormInput
         id="password"
         label="Password"
         type="password"
         :value="password"
-        :rules="requiredRule"
+        :rules="passwordRules"
         @input="handlePasswordChange"
+        :errorMessages="apiErrorMessages"
       />
       <v-row class="mt-10">
         <v-btn type="submit" block class="">Sign In</v-btn>
