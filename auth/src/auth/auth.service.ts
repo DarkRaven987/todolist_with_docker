@@ -42,7 +42,6 @@ export class AuthService {
   }
 
   async logout(userId: number) {
-    Logger.log('userId', userId);
     return this.usersService.update(userId, { refreshToken: null });
   }
 

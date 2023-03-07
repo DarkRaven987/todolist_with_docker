@@ -24,9 +24,6 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
       payload.headers.authorization || payload.headers.Authorization;
     const user = this.jwtService.decode(currUserToken.split(' ')[1]);
 
-    return {
-      ...payload,
-      user,
-    };
+    return user;
   }
 }
