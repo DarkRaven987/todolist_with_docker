@@ -8,7 +8,7 @@ const getAuthAgentInstance = () =>
   });
 
 const refreshAccessToken = async () => {
-  return getAuthAgentInstance.get('/auth/refresh', {
+  return getAuthAgentInstance().get('/auth/refresh', {
     headers: {
       Authorization: localStorage.getItem('refreshToken'),
     },
@@ -48,11 +48,11 @@ const getApiAgentInstance = (props = {}) => {
       console.error('error.message', error.message);
 
       if (
-        (error?.response?.status === 401 ||
+        ([401, 403].includes(+error?.response?.status) ||
           (error?.response?.status === 500 &&
             error?.response?.data.message ===
               'There was an error while authenticating token')) &&
-        !error?.config?.url.includes('token') &&
+        !error?.config?.url.includes('refresh') &&
         !originalRequest._retry
       ) {
         // TODO: change to check for status 401 when it will be handle from API
@@ -79,7 +79,7 @@ const getApiAgentInstance = (props = {}) => {
       }
 
       if (
-        [401, 500].includes(error?.response?.status) &&
+        [401, 403, 500].includes(error?.response?.status) &&
         originalRequest._retry
       ) {
         console.log('TOKEN ERROR: Clearing token data.');
