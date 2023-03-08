@@ -9,6 +9,17 @@ import CreateTaskModal from './components/CreateTaskModal/CreateTaskModal.vue';
 const todos = useTodosStore();
 
 const showAddTaskModal = ref(false);
+const todoToUpdate = ref(null);
+
+const handleSelectTodoToUpdate = (todo) => {
+  todoToUpdate.value = { ...todo };
+  toggleModal();
+};
+
+const handleOpenCreateModal = () => {
+  todoToUpdate.value = null;
+  toggleModal();
+};
 
 const toggleModal = () => {
   showAddTaskModal.value = !showAddTaskModal.value;
@@ -37,7 +48,7 @@ onBeforeMount(() => {
             </template>
 
             <v-list class="mt-3">
-              <v-list-item @click="toggleModal">
+              <v-list-item @click="handleOpenCreateModal">
                 <v-list-item-title class="d-flex align-center">
                   <v-icon icon="mdi-plus"></v-icon>
                   <span>Add Task</span>
@@ -52,6 +63,7 @@ onBeforeMount(() => {
             v-bind:key="todo.id"
             :todo="todo"
             :number="i + 1"
+            :onSelect="handleSelectTodoToUpdate"
           />
         </v-row>
         <CircleLoader
@@ -63,7 +75,11 @@ onBeforeMount(() => {
         />
       </v-container>
     </div>
-    <CreateTaskModal :displayed="showAddTaskModal" :toggle="toggleModal" />
+    <CreateTaskModal
+      v-if="showAddTaskModal"
+      :toggle="toggleModal"
+      :todoToUpdate="todoToUpdate"
+    />
   </v-layout>
 </template>
 

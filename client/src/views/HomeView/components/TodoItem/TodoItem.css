@@ -31,6 +31,16 @@
   font-size: 30px;
 }
 
+.edit-btn {
+  right: 0;
+  background-color: transparent;
+  width: fit-content;
+  height: fit-content;
+  min-width: unset;
+  padding: 5px;
+  box-shadow: unset;
+}
+
 .todo-description {
   font-size: 25px;
 }

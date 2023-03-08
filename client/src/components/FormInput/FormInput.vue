@@ -1,5 +1,7 @@
 <script setup>
-defineProps({
+import { ref } from 'vue';
+
+const props = defineProps({
   id: String,
   label: String,
   type: String,
@@ -10,6 +12,8 @@ defineProps({
   loading: Boolean,
   variant: String,
 });
+
+const localValue = ref(props.value);
 </script>
 
 <template>
@@ -20,7 +24,7 @@ defineProps({
       :id="id"
       :type="type"
       :label="label"
-      :value="value"
+      v-model="localValue"
       :rules="rules"
       v-on:input="$emit('input', $event)"
       :error-messages="errorMessages"

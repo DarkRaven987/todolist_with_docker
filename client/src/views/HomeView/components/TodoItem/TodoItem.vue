@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 const props = defineProps({
   todo: Object,
   number: Number,
+  onSelect: Function,
 });
 
 const todos = useTodosStore();
@@ -67,8 +68,14 @@ const todoDate = computed(() => {
       <span>#{{ number }}</span>
       <span>{{ todoDate }}</span>
     </v-row>
-    <v-row class="todo-title justify-center mb-4">
+    <v-row
+      class="todo-title justify-center align-center mb-4 position-relative"
+    >
       <span>{{ todo.title }}</span>
+
+      <v-btn class="edit-btn position-absolute" @click="onSelect(todo)">
+        <v-icon icon="mdi-pencil" />
+      </v-btn>
     </v-row>
     <v-row class="todo-description mb-4">
       {{ todo.description }}
