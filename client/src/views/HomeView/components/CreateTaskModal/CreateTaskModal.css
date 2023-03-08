@@ -1,0 +1,13 @@
+.modal-wrapper-container {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1006;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  min-width: 350px;
+  padding: 40px;
+}

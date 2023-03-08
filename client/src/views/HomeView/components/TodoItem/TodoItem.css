@@ -1,0 +1,75 @@
+.todo-item-container {
+  --todo-color: lightblue;
+  --in-progress-color: rgb(255, 199, 96);
+  --done-color: lightgreen;
+  flex: 1;
+  max-width: calc(33% - 60px);
+  min-width: 250px;
+  margin: 0 10px 20px;
+  height: fit-content;
+  padding: 16px;
+  font-family: 'Shadows Into Light', cursive;
+}
+
+.todo-item-container.to-do {
+  background-color: var(--todo-color);
+}
+
+.todo-item-container.in-progress {
+  background-color: var(--in-progress-color);
+}
+
+.todo-item-container.done {
+  background-color: var(--done-color);
+}
+
+.task-sub-data {
+  font-size: 24px;
+}
+
+.todo-title {
+  font-size: 30px;
+}
+
+.edit-btn {
+  right: 0;
+  background-color: transparent;
+  width: fit-content;
+  height: fit-content;
+  min-width: unset;
+  padding: 5px;
+  box-shadow: unset;
+}
+
+.todo-description {
+  font-size: 25px;
+}
+
+.status-label {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.status-label.remove-label {
+  cursor: pointer;
+  font-size: 26px;
+}
+
+.status-label.remove-label:hover {
+  text-decoration: underline;
+}
+
+.status-label.no-activity {
+  cursor: default;
+  font-size: 26px;
+}
+
+.status-label.current {
+  border: 1px solid black;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+.status-label.passed {
+  text-decoration: line-through;
+}

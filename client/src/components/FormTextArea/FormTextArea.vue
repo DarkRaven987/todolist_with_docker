@@ -4,7 +4,6 @@ import { ref } from 'vue';
 const props = defineProps({
   id: String,
   label: String,
-  type: String,
   value: String,
   onChange: Function,
   rules: Object,
@@ -18,11 +17,10 @@ const localValue = ref(props.value);
 
 <template>
   <v-row class="form-input-container">
-    <v-text-field
+    <v-textarea
       class="text-field"
       :variant="variant"
       :id="id"
-      :type="type"
       :label="label"
       v-model="localValue"
       :rules="rules"
@@ -41,8 +39,8 @@ const localValue = ref(props.value);
         >
         </v-progress-circular>
       </template>
-    </v-text-field>
+    </v-textarea>
   </v-row>
 </template>
 
-<style src="./FormInput.css"></style>
+<style src="./FormTextArea.css"></style>

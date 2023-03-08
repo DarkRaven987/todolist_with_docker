@@ -13,4 +13,8 @@ export class TodosStatusEnumService {
   getStatusEnums() {
     return this.todosStatusEnumRepository.find();
   }
+
+  getById(id: number) {
+    return this.todosStatusEnumRepository.findOne({ where: { id } });
+  }
 }

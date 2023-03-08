@@ -83,6 +83,7 @@ const apiErrorMessages = computed(() => {
         :rules="usernameRules"
         @input="handleUsernameChange"
         :errorMessages="apiErrorMessages"
+        variant="outlined"
       />
       <FormInput
         id="password"
@@ -92,6 +93,7 @@ const apiErrorMessages = computed(() => {
         :rules="passwordRules"
         @input="handlePasswordChange"
         :errorMessages="apiErrorMessages"
+        variant="outlined"
       />
       <v-row class="mt-10">
         <v-btn type="submit" block class="">Sign In</v-btn>

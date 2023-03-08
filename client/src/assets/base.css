@@ -1,4 +1,8 @@
 /* color palette from <https://github.com/vuejs/theme> */
+html {
+  overflow: auto;
+}
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -85,4 +89,9 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px lightgray inset !important;
+}
+
+.v-row {
+  margin-left: 0;
+  margin-right: 0;
 }

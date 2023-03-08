@@ -2,24 +2,22 @@ import axios from 'axios';
 
 const localStorage = window.localStorage;
 
-const getAuthAgentInstance = () =>
-  axios.create({
+const refreshAccessToken = () => {
+  const requester = axios.create({
     baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
   });
-
-const refreshAccessToken = async () => {
-  return getAuthAgentInstance.get('/auth/refresh', {
+  return requester.get('/auth/refresh', {
     headers: {
       Authorization: localStorage.getItem('refreshToken'),
     },
   });
 };
 
-const getApiAgentInstance = (props = {}) => {
-  const { headers } = props;
+const getAgentInstance = (props = {}) => {
+  const { headers, baseURL } = props;
 
   const requester = axios.create({
-    baseURL: import.meta.env.VITE_API_SERVICE_URL,
+    baseURL,
   });
 
   let delayPromise = null;
@@ -48,11 +46,11 @@ const getApiAgentInstance = (props = {}) => {
       console.error('error.message', error.message);
 
       if (
-        (error?.response?.status === 401 ||
+        ([401, 403].includes(+error?.response?.status) ||
           (error?.response?.status === 500 &&
             error?.response?.data.message ===
               'There was an error while authenticating token')) &&
-        !error?.config?.url.includes('token') &&
+        !error?.config?.url.includes('refresh') &&
         !originalRequest._retry
       ) {
         // TODO: change to check for status 401 when it will be handle from API
@@ -73,13 +71,13 @@ const getApiAgentInstance = (props = {}) => {
             .catch(() => {});
         }
 
-        await delayPromise.finally(() => (requester.delayPromise = null));
+        await delayPromise?.finally(() => (delayPromise = null));
 
         return requester(originalRequest);
       }
 
       if (
-        [401, 500].includes(error?.response?.status) &&
+        [401, 403, 500].includes(error?.response?.status) &&
         originalRequest._retry
       ) {
         console.log('TOKEN ERROR: Clearing token data.');
@@ -95,5 +93,9 @@ const getApiAgentInstance = (props = {}) => {
   return requester;
 };
 
-export const apiAgent = getApiAgentInstance();
-export const authAgent = getAuthAgentInstance();
+export const apiAgent = getAgentInstance({
+  baseURL: import.meta.env.VITE_API_SERVICE_URL,
+});
+export const authAgent = getAgentInstance({
+  baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
+});

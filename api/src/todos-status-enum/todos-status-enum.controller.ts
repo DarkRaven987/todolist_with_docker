@@ -10,7 +10,7 @@ export class TodosStatusEnumController {
   ) {}
 
   @Get()
-  getUsers() {
+  getStatusEnums() {
     return this.todosStatusEnumsService.getStatusEnums();
   }
 }

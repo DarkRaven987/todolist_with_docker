@@ -112,6 +112,7 @@ const isFormValid = computed(() => {
         @input="handleNewUsernameChange"
         :errorMessages="isUniqueUsernameErrorMessage"
         :loading="isLoadingUsernameCheck"
+        variant="outlined"
       />
       <FormInput
         class="mb-6"
@@ -122,6 +123,7 @@ const isFormValid = computed(() => {
         :rules="passwordFieldRules"
         @input="handleNewPasswordChange"
         :errorMessages="apiErrorMessages"
+        variant="outlined"
       />
       <FormInput
         id="confirm_password"
@@ -131,6 +133,7 @@ const isFormValid = computed(() => {
         :rules="confirmPasswordFieldRules"
         @input="handleConfirmPasswordChange"
         :errorMessages="apiErrorMessages"
+        variant="outlined"
       />
       <v-row class="mt-10">
         <v-btn type="submit" block>Sign Up</v-btn>

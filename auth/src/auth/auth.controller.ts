@@ -21,6 +21,7 @@ import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { MessagePattern } from '@nestjs/microservices';
 import { JoiValidationPipe } from 'src/pipes/joi.pipe';
 import { UsersService } from 'src/users/users.service';
+import { AccessTokenGuard } from './guards/accessToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -41,14 +42,15 @@ export class AuthController {
     return this.authService.signIn(data);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {
-    if (!req?.user) throw new ForbiddenException();
+    if (!req.user) throw new ForbiddenException();
     this.authService.logout(req.user['sub']);
   }
 
   @UseGuards(RefreshTokenGuard)
-  @Post('refresh')
+  @Get('refresh')
   refreshTokens(@Req() req: Request) {
     const userId = req.user['sub'];
     const refreshToken = req.get('Authorization').replace('Bearer', '').trim();
