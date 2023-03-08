@@ -14,6 +14,8 @@ import {
   createTodoSchema,
   deleteTodoDto,
   deleteTodoSchema,
+  updateTodoDto,
+  updateTodoSchema,
   updateTodoStatusDto,
   updateTodoStatusSchema,
 } from './dtos/todos.dto';
@@ -65,5 +67,11 @@ export class TodosController {
   @UsePipes(new JoiValidationPipe(deleteTodoSchema))
   async deleteTodo(@Body() data: deleteTodoDto) {
     return this.todosService.deleteTodo(data);
+  }
+
+  @Post('update')
+  @UsePipes(new JoiValidationPipe(updateTodoSchema))
+  async updateTodo(@Body() data: updateTodoDto) {
+    return this.todosService.updateTodo(data);
   }
 }
