@@ -1,6 +1,21 @@
 .content-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: auto;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  width: 100%;
+  margin-top: 64px;
+}
+
+.home-loader {
+  margin: 20vh auto;
+}
+
+.todos-list-container {
+  flex: unset;
+}
+
+.todos-actions-btn {
+  right: 0;
+  box-shadow: unset;
 }

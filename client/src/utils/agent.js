@@ -2,24 +2,22 @@ import axios from 'axios';
 
 const localStorage = window.localStorage;
 
-const refreshAccessToken = async () => {
-  return axios
-    .create({
-      baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
-    })
-    .get('/auth/refresh', {
-      headers: {
-        Authorization: localStorage.getItem('refreshToken'),
-      },
-    });
+const refreshAccessToken = () => {
+  const requester = axios.create({
+    baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
+  });
+  return requester.get('/auth/refresh', {
+    headers: {
+      Authorization: localStorage.getItem('refreshToken'),
+    },
+  });
 };
 
 const getAgentInstance = (props = {}) => {
-  console.log('props', props);
-  const { headers } = props;
+  const { headers, baseURL } = props;
 
   const requester = axios.create({
-    baseURL: props.baseURL,
+    baseURL,
   });
 
   let delayPromise = null;
@@ -73,7 +71,7 @@ const getAgentInstance = (props = {}) => {
             .catch(() => {});
         }
 
-        await delayPromise.finally(() => (requester.delayPromise = null));
+        await delayPromise?.finally(() => (delayPromise = null));
 
         return requester(originalRequest);
       }
