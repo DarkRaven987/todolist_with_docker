@@ -11,12 +11,3 @@
   margin-top: 20vh;
   left: calc((100% - 6px) / 2);
 }
-
-.todos-list-container {
-  flex: unset;
-}
-
-.todos-actions-btn {
-  right: 0;
-  box-shadow: unset;
-}
