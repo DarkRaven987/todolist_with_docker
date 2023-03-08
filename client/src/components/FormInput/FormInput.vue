@@ -8,6 +8,7 @@ defineProps({
   rules: Object,
   errorMessages: Object,
   loading: Boolean,
+  variant: String,
 });
 </script>
 
@@ -15,7 +16,7 @@ defineProps({
   <v-row class="form-input-container">
     <v-text-field
       class="text-field"
-      variant="outlined"
+      :variant="variant"
       :id="id"
       :type="type"
       :label="label"
