@@ -2,24 +2,24 @@ import axios from 'axios';
 
 const localStorage = window.localStorage;
 
-const getAuthAgentInstance = () =>
-  axios.create({
-    baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
-  });
-
 const refreshAccessToken = async () => {
-  return getAuthAgentInstance().get('/auth/refresh', {
-    headers: {
-      Authorization: localStorage.getItem('refreshToken'),
-    },
-  });
+  return axios
+    .create({
+      baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
+    })
+    .get('/auth/refresh', {
+      headers: {
+        Authorization: localStorage.getItem('refreshToken'),
+      },
+    });
 };
 
-const getApiAgentInstance = (props = {}) => {
+const getAgentInstance = (props = {}) => {
+  console.log('props', props);
   const { headers } = props;
 
   const requester = axios.create({
-    baseURL: import.meta.env.VITE_API_SERVICE_URL,
+    baseURL: props.baseURL,
   });
 
   let delayPromise = null;
@@ -95,5 +95,9 @@ const getApiAgentInstance = (props = {}) => {
   return requester;
 };
 
-export const apiAgent = getApiAgentInstance();
-export const authAgent = getAuthAgentInstance();
+export const apiAgent = getAgentInstance({
+  baseURL: import.meta.env.VITE_API_SERVICE_URL,
+});
+export const authAgent = getAgentInstance({
+  baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
+});
