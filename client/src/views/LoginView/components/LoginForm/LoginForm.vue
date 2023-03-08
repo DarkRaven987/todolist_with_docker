@@ -53,6 +53,7 @@ const formSubmit = () => {
       })
       .then(({ data }) => {
         userStore.setUserData(data?.user);
+        localStorage.setItem('user', JSON.stringify(data?.user));
         localStorage.setItem('accessToken', `Bearer ${data.accessToken}`);
         localStorage.setItem('refreshToken', `Bearer ${data.refreshToken}`);
         router.push('/dashboard');
