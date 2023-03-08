@@ -23,6 +23,9 @@ export class Todos implements ITodos {
   @Column({ type: 'int' })
   statusId: number;
 
+  @Column({ type: 'boolean', default: false })
+  isDeleted: boolean;
+
   @Column({
     nullable: false,
     default: new Date(),
