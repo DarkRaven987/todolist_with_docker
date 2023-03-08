@@ -5,10 +5,14 @@ import { TodosController } from './todos.controller';
 import { TodosService } from './todos.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TodosStatusEnumModule } from 'src/todos-status-enum/todos-status-enum.module';
+import { TodosStatusEnumService } from 'src/todos-status-enum/todos-status-enum.service';
+import { TodosStatusEnum } from 'src/entities/todos_status_enum.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Todos]),
+    TodosStatusEnumModule,
+    TypeOrmModule.forFeature([Todos, TodosStatusEnum]),
     ClientsModule.registerAsync([
       {
         name: 'AUTH_CLIENT',
@@ -25,6 +29,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ]),
   ],
   controllers: [TodosController],
-  providers: [TodosService],
+  providers: [TodosService, TodosStatusEnumService],
 })
 export class TodosModule {}
