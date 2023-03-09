@@ -41,13 +41,13 @@ export class AuthService {
   }
 
   async logout(userId: number) {
-    return this.usersService.update(userId, { refreshToken: null });
+    return this.usersService.update({ userId, refreshToken: null });
   }
 
   async updateRefreshToken(userId: number, refreshToken: string) {
-    const hashedRefreshToken = hashData(refreshToken);
-    await this.usersService.update(userId, {
-      refreshToken: hashedRefreshToken,
+    await this.usersService.update({
+      userId,
+      refreshToken,
     });
   }
 
