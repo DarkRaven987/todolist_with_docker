@@ -12,11 +12,19 @@
   left: calc((100% - 6px) / 2);
 }
 
-.todos-list-container {
-  flex: unset;
+.less-width-container {
+  max-width: 700px;
 }
 
-.todos-actions-btn {
-  right: 0;
-  box-shadow: unset;
+.user-name-label {
+  font-size: 22px;
+}
+
+.v-btn.active {
+  background-color: blue;
+  color: white;
+}
+
+.form-container {
+  max-width: 260px;
 }

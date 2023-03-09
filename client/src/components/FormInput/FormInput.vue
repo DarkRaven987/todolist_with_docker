@@ -11,6 +11,7 @@ const props = defineProps({
   errorMessages: Object,
   loading: Boolean,
   variant: String,
+  autoСomplete: String,
 });
 
 const localValue = ref(props.value);
@@ -28,6 +29,7 @@ const localValue = ref(props.value);
       :rules="rules"
       v-on:input="$emit('input', $event)"
       :error-messages="errorMessages"
+      :autocomplete="autoСomplete"
     >
       <template v-slot:loader>
         <v-progress-circular

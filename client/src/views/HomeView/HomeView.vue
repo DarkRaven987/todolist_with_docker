@@ -68,7 +68,7 @@ onBeforeMount(() => {
         </v-row>
         <CircleLoader
           :loading="todos.loadingData"
-          class="home-loader"
+          class="page-loader"
           color="warning"
           width="6"
           size="40"

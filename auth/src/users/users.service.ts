@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto, UpdateUserDto } from './dtos/users.dto';
+import { hashData } from '../utils/index';
 
 @Injectable()
 export class UsersService {
@@ -28,8 +29,18 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { username } });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
-    return this.usersRepository.update(id, updateUserDto);
+  async update(updateUserDto: UpdateUserDto) {
+    const { userId, ...updateData } = updateUserDto;
+
+    if (updateData.password) {
+      updateData.password = hashData(updateData.password);
+    }
+
+    if (updateData.refreshToken) {
+      updateData.refreshToken = hashData(updateData.refreshToken);
+    }
+
+    return this.usersRepository.update(userId, updateData);
   }
 
   async remove(id: number) {

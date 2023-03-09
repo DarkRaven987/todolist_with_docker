@@ -7,10 +7,16 @@ import {
   Param,
   Delete,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dtos/users.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  updateUserSchema,
+} from './dtos/users.dto';
 import { AccessTokenGuard } from 'src/auth/guards/accessToken.guard';
+import { JoiValidationPipe } from 'src/pipes/joi.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -35,9 +41,10 @@ export class UsersController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @UsePipes(new JoiValidationPipe(updateUserSchema))
+  @Patch()
+  update(@Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(updateUserDto);
   }
 
   @UseGuards(AccessTokenGuard)
