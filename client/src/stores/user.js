@@ -25,7 +25,9 @@ export const useUserStore = defineStore('user', () => {
       user.value = JSON.parse(localStorage.getItem('user'));
     }
 
-    authAgent.get(`/users/${user.value.id}`);
+    if (user?.value?.id) {
+      authAgent.get(`/users/${user?.value?.id}`);
+    }
   });
 
   return { user, setUserData, logout };
