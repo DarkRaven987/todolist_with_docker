@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  pg:
+    image: 'postgres'
+    container_name: 'postgres'
+    ports:
+      - '5555:5432'
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./db/pg_data:/var/lib/postgresql/data
+
+  api:
+    container_name: 'todo_api'
+    restart: always
+    build: ./api/
+    volumes:
+      - ./api:/app
+    links:
+      - pg
+    ports:
+      - '3001:8081'
+    environment:
+      - DB_HOST=pg
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=postgres
+      - SERVICE_PORT=3001
+      - AUTH_MICROSERVICE_HOST=auth
+      - AUTH_MICROSERVICE_PORT=4002
+
+  auth:
+    container_name: 'todo_auth'
+    restart: always
+    build: ./auth/
+    volumes:
+      - ./auth:/app
+    links:
+      - pg
+    ports:
+      - '3002:8081'
+    environment:
+      - DB_HOST=pg
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=postgres
+      - JWT_REFRESH_SECRET=test_refresh_secret_#1
+      - JWT_REFRESH_EXPIRE=30d
+      - JWT_ACCESS_SECRET=test_access_secret_#1
+      - JWT_ACCESS_EXPIRE=5m
+      - SERVICE_PORT=3002
+      - MICROSERVICE_HOST=auth
+      - MICROSERVICE_PORT=4002
+
+  client:
+    build: ./client
+    command: 'npm run build'
+    volumes:
+      - ./client:/app
+      - ./client/dist:/usr/src/app/dist
+    ports:
+      - 5173:8081
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./client/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./client/dist:/usr/share/nginx/html
+    working_dir: /usr/share/nginx/html
+    ports:
+      - 8081:8081
+    links:
+      - client
+      - api
+      - auth
+    depends_on:
+      - client
