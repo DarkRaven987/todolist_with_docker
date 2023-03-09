@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { authAgent } from '../../utils/agent';
+import { useUserStore } from '../../stores/user';
+
+const users = useUserStore();
 
 const router = useRouter();
 
@@ -29,14 +31,7 @@ const items = ref([
     title: 'Sign Out',
     icon: 'mdi-exit-to-app',
     value: 'sign_out',
-    onClick: () => {
-      authAgent.get('/auth/logout').then(() => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        router.push('/login');
-      });
-    },
+    onClick: () => users.logout(),
   },
 ]);
 </script>

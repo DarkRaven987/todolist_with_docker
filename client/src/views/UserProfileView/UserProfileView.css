@@ -11,3 +11,20 @@
   margin-top: 20vh;
   left: calc((100% - 6px) / 2);
 }
+
+.less-width-container {
+  max-width: 700px;
+}
+
+.user-name-label {
+  font-size: 22px;
+}
+
+.v-btn.active {
+  background-color: blue;
+  color: white;
+}
+
+.form-container {
+  max-width: 260px;
+}
