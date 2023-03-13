@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   UseGuards,
   UsePipes,
@@ -73,5 +74,21 @@ export class TodosController {
   @UsePipes(new JoiValidationPipe(updateTodoSchema))
   async updateTodo(@Body() data: updateTodoDto) {
     return this.todosService.updateTodo(data);
+  }
+
+  @Get('dailyCreated/:startDate/:endDate')
+  getDailyCreatedTodos(
+    @Param('startDate') startDate: string,
+    @Param('endDate') endDate: string,
+  ) {
+    return this.todosService.getTodosDaily('created', startDate, endDate);
+  }
+
+  @Get('dailyDone/:startDate/:endDate')
+  getDailyDoneTodos(
+    @Param('startDate') startDate: string,
+    @Param('endDate') endDate: string,
+  ) {
+    return this.todosService.getTodosDaily('done', startDate, endDate);
   }
 }
