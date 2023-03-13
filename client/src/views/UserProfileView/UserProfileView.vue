@@ -15,6 +15,10 @@ const handleSelectEditMode = (val) => {
   else userEditMode.value = '';
 };
 
+const closeOtherSessions = () => {
+  user.logoutExceptCurrent();
+};
+
 const isUsernameFormDisplayed = computed(
   () => userEditMode.value === 'username',
 );
@@ -33,7 +37,7 @@ const passwordButtonClass = computed(() => {
 
 <template>
   <v-layout>
-    <DashboardHeader />
+    <DashboardHeader :title="'User Profile'" />
     <div class="content-container">
       <v-container class="less-width-container">
         <v-col>
@@ -43,9 +47,10 @@ const passwordButtonClass = computed(() => {
           <v-row>
             <UserIcon />
 
-            <v-col>
-              <v-row class="user-name-label">
-                {{ user.user?.username }}
+            <v-col class="user-content-col">
+              <v-row class="user-name-label justify-space-between">
+                <span>{{ user.user?.username }}</span>
+                <v-btn @click="closeOtherSessions">Close other sessions</v-btn>
               </v-row>
 
               <v-row class="d-flex mt-10">

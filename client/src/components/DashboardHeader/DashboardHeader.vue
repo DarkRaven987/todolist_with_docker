@@ -3,6 +3,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/user';
 
+defineProps({
+  title: String,
+});
+
 const users = useUserStore();
 
 const router = useRouter();
@@ -14,7 +18,6 @@ const items = ref([
     icon: 'mdi-home',
     value: 'dashboard',
     onClick: () => {
-      console.log('Dashboard');
       router.push('/dashboard');
     },
   },
@@ -23,7 +26,6 @@ const items = ref([
     icon: 'mdi-account',
     value: 'profile',
     onClick: () => {
-      console.log('Profile');
       router.push('/dashboard/profile');
     },
   },
@@ -41,7 +43,7 @@ const items = ref([
     <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer">
     </v-app-bar-nav-icon>
 
-    <v-toolbar-title>User profile</v-toolbar-title>
+    <v-toolbar-title>{{ title }}</v-toolbar-title>
 
     <v-spacer></v-spacer>
   </v-app-bar>

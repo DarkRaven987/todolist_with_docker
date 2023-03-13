@@ -12,7 +12,9 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function logout() {
-    authAgent.get('/auth/logout').then(() => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    authAgent.post('/auth/logout', { refreshToken }).then(() => {
+      setUserData(null);
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
@@ -20,13 +22,42 @@ export const useUserStore = defineStore('user', () => {
     });
   }
 
-  onBeforeMount(() => {
-    if (!user.value?.id) {
-      user.value = JSON.parse(localStorage.getItem('user'));
-    }
+  function clearAllSessions() {
+    authAgent.get('/auth/totalLogout').then(() => {
+      setUserData(null);
+      localStorage.removeItem('user');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      router.push('/login');
+    });
+  }
 
-    authAgent.get(`/users/${user.value.id}`);
+  function logoutExceptCurrent() {
+    const refreshToken = localStorage.getItem('refreshToken');
+    authAgent.post('/auth/logoutExceptCurrent', { refreshToken });
+  }
+
+  onBeforeMount(() => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (refreshToken && accessToken) {
+      authAgent
+        .post(`/auth/validateSession`, {
+          jwt: refreshToken,
+        })
+        .then(({ data }) => {
+          if (!data?.sub) {
+            logout();
+          } else {
+            setUserData({
+              id: data.sub,
+              username: data.username,
+            });
+          }
+        });
+    }
   });
 
-  return { user, setUserData, logout };
+  return { user, setUserData, logout, clearAllSessions, logoutExceptCurrent };
 });

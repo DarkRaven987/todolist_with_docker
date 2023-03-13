@@ -22,6 +22,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { JoiValidationPipe } from 'src/pipes/joi.pipe';
 import { UsersService } from 'src/users/users.service';
 import { AccessTokenGuard } from './guards/accessToken.guard';
+import { ACCESS_TOKEN_KEY, REFERSH_TOKEN_KEY } from 'src/utils/const';
 
 @Controller('auth')
 export class AuthController {
@@ -42,11 +43,32 @@ export class AuthController {
     return this.authService.signIn(data);
   }
 
+  @Post('logout')
+  logout(@Body() body) {
+    const authHeader = `${body.refreshToken}`.split(' ');
+    if (authHeader[0] !== 'Bearer' || !authHeader[1]) {
+      throw new ForbiddenException();
+    }
+
+    this.authService.logout(authHeader[1]);
+  }
+
   @UseGuards(AccessTokenGuard)
-  @Get('logout')
-  logout(@Req() req: Request) {
+  @Get('totalLogout')
+  totalLogout(@Req() req: Request) {
     if (!req.user) throw new ForbiddenException();
-    this.authService.logout(req.user['sub']);
+    this.authService.totalLogout(req.user['sub']);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('logoutExceptCurrent')
+  logoutExceptCurrent(@Req() req: Request, @Body() body) {
+    const authHeader = `${body.refreshToken}`.split(' ');
+    Logger.log('authHeader', authHeader);
+    Logger.log('req.user', req.user);
+    if (!req.user || authHeader[0] !== 'Bearer' || !authHeader[1])
+      throw new ForbiddenException();
+    this.authService.logoutExceptCurrent(req.user['sub'], authHeader[1]);
   }
 
   @UseGuards(RefreshTokenGuard)
@@ -63,10 +85,24 @@ export class AuthController {
     return { isUnique: !res };
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Post('validateSession')
+  async validateSession(@Req() req: Request, @Body() data: ValidateDto) {
+    const res = await this.authService.validateToken({
+      userId: req.user['sub'],
+      jwt: data.jwt.split(' ')[1],
+      keyName: REFERSH_TOKEN_KEY,
+    });
+    return res;
+  }
+
   @MessagePattern({ role: 'auth', cmd: 'verify' })
   async verifyToken(data: ValidateDto) {
     try {
-      const res = await this.authService.validateToken(data.jwt);
+      const res = await this.authService.validateToken({
+        jwt: data.jwt,
+        keyName: ACCESS_TOKEN_KEY,
+      });
 
       return res;
     } catch (e) {

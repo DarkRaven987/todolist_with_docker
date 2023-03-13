@@ -59,8 +59,7 @@ const formSubmit = () => {
         username: username.value,
       })
       .then(() => {
-        // users.clearSessions()
-        users.logout();
+        users.clearAllSessions();
       });
   }
 };

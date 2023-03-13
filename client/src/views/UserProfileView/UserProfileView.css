@@ -12,6 +12,10 @@
   left: calc((100% - 6px) / 2);
 }
 
+.user-content-col {
+  max-width: 418px;
+}
+
 .less-width-container {
   max-width: 700px;
 }
