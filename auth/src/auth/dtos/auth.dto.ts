@@ -27,3 +27,9 @@ export class AuthDto {
 export class ValidateDto {
   jwt: string;
 }
+
+export class ValidateServiceDto {
+  userId?: number;
+  jwt: string;
+  keyName: string;
+}

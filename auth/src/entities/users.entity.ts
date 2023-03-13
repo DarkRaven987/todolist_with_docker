@@ -1,5 +1,12 @@
 import { IUsers } from '../users/users.interface';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Sessions } from './sessions.entity';
 
 @Entity()
 export class Users implements IUsers {
@@ -21,8 +28,7 @@ export class Users implements IUsers {
   })
   password: string;
 
-  @Column({
-    default: '',
-  })
-  refreshToken: string;
+  @OneToMany(() => Sessions, (session: Sessions) => session.id)
+  @JoinColumn({ name: 'userId' })
+  public sessions: Sessions;
 }
