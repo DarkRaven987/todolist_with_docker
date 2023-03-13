@@ -44,8 +44,7 @@ const formSubmit = () => {
         password: password.value,
       })
       .then(() => {
-        // users.clearSessions()
-        users.logout();
+        users.clearAllSessions();
       });
   }
 };

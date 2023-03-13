@@ -32,7 +32,7 @@ onBeforeMount(() => {
 
 <template>
   <v-layout>
-    <DashboardHeader />
+    <DashboardHeader :title="'Todo Dashboard'" />
     <div class="content-container">
       <v-container>
         <div class="d-flex justify-center mb-8 position-relative">
