@@ -4,6 +4,7 @@ import FormInput from '../../../../components/FormInput/FormInput.vue';
 import { authAgent } from '../../../../utils/agent';
 import { passwordRegExp } from '../../../../utils/consts';
 import { useUserStore } from '../../../../stores/user';
+import FormPasswordInput from '../../../../components/FormPasswordInput/FormPasswordInput.vue';
 
 const users = useUserStore();
 
@@ -55,7 +56,7 @@ const isFormValid = computed(() => {
 
 <template>
   <v-form class="pt-4" @submit.prevent="formSubmit">
-    <FormInput
+    <FormPasswordInput
       class="mb-6"
       id="new_password"
       label="New password"
@@ -65,7 +66,7 @@ const isFormValid = computed(() => {
       @input="handlePasswordChange"
     />
 
-    <FormInput
+    <FormPasswordInput
       id="confirm_password"
       label="Confirm password"
       type="password"

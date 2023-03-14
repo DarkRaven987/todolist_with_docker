@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
 import { authAgent } from '../../../../utils/agent';
 import { AUTH_FORM, passwordRegExp } from '../../../../utils/consts';
+import FormPasswordInput from '../../../../components/FormPasswordInput/FormPasswordInput.vue';
 
 const props = defineProps({
   handleFormChange: Function,
@@ -114,21 +115,19 @@ const isFormValid = computed(() => {
         :loading="isLoadingUsernameCheck"
         variant="outlined"
       />
-      <FormInput
+      <FormPasswordInput
         class="mb-6"
         id="new_password"
         label="New password"
-        type="password"
         :value="password"
         :rules="passwordFieldRules"
         @input="handleNewPasswordChange"
         :errorMessages="apiErrorMessages"
         variant="outlined"
       />
-      <FormInput
+      <FormPasswordInput
         id="confirm_password"
         label="Confirm password"
-        type="password"
         :value="confirmPassword"
         :rules="confirmPasswordFieldRules"
         @input="handleConfirmPasswordChange"

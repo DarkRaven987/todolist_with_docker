@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
+import FormPasswordInput from '../../../../components/FormPasswordInput/FormPasswordInput.vue';
 import { useUserStore } from '../../../../stores/user';
 import { authAgent } from '../../../../utils/agent';
 import { AUTH_FORM, passwordRegExp } from '../../../../utils/consts';
@@ -86,10 +87,9 @@ const apiErrorMessages = computed(() => {
         :errorMessages="apiErrorMessages"
         variant="outlined"
       />
-      <FormInput
+      <FormPasswordInput
         id="password"
         label="Password"
-        type="password"
         :value="password"
         :rules="passwordRules"
         @input="handlePasswordChange"
