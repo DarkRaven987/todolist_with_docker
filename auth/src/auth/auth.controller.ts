@@ -11,12 +11,8 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request } from 'express';
-import {
-  AuthDto,
-  authUserSchema,
-  checkUsernameDto,
-  ValidateDto,
-} from './dtos/auth.dto';
+import { AuthDto, checkUsernameDto, ValidateDto } from './dtos/auth.dto';
+import { authUserSchema } from './dtos/auth.joi';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { MessagePattern } from '@nestjs/microservices';
 import { JoiValidationPipe } from 'src/pipes/joi.pipe';
@@ -64,8 +60,6 @@ export class AuthController {
   @Post('logoutExceptCurrent')
   logoutExceptCurrent(@Req() req: Request, @Body() body) {
     const authHeader = `${body.refreshToken}`.split(' ');
-    Logger.log('authHeader', authHeader);
-    Logger.log('req.user', req.user);
     if (!req.user || authHeader[0] !== 'Bearer' || !authHeader[1])
       throw new ForbiddenException();
     this.authService.logoutExceptCurrent(req.user['sub'], authHeader[1]);
