@@ -2,5 +2,6 @@
 */.DS_Store
 */dist
 */.env
+!client/.env
 */.vscode
 ./db
