@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView/HomeView.vue';
 import LoginView from '../views/LoginView/LoginView.vue';
 import UserProfileView from '../views/UserProfileView/UserProfileView.vue';
+import AnalyticsView from '../views/AnalyticsView/AnalyticsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/dashboard/profile',
       name: 'user_profile',
       component: UserProfileView,
+    },
+    {
+      path: '/dashboard/analytics',
+      name: 'analytics',
+      component: AnalyticsView,
     },
     {
       path: '/:pathMatch(.*)*',

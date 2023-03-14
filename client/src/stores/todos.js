@@ -10,18 +10,16 @@ export const useTodosStore = defineStore('todos', () => {
 
   function loadTodosData() {
     loadingData.value = true;
-    setTimeout(() => {
-      Promise.all([apiAgent.get('/todos'), apiAgent.get('/todos-status-enum')])
-        .then(([{ data: todoList }, { data: statusList }]) => {
-          setTodosData(
-            todoList.sort(
-              (a, b) => dayjs(b.created_at) - dayjs(a.created_at) + b.id - a.id,
-            ),
-          );
-          setTodosStatusesData(statusList);
-        })
-        .finally(() => (loadingData.value = false));
-    }, 1000);
+    Promise.all([apiAgent.get('/todos'), apiAgent.get('/todos-status-enum')])
+      .then(([{ data: todoList }, { data: statusList }]) => {
+        setTodosData(
+          todoList.sort(
+            (a, b) => dayjs(b.created_at) - dayjs(a.created_at) + b.id - a.id,
+          ),
+        );
+        setTodosStatusesData(statusList);
+      })
+      .finally(() => (loadingData.value = false));
   }
 
   function setTodosData(data) {

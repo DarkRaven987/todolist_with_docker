@@ -22,6 +22,14 @@ const items = ref([
     },
   },
   {
+    title: 'Analytics',
+    icon: 'mdi-chart-bar',
+    value: 'analytics',
+    onClick: () => {
+      router.push('/dashboard/analytics');
+    },
+  },
+  {
     title: 'Profile',
     icon: 'mdi-account',
     value: 'profile',
