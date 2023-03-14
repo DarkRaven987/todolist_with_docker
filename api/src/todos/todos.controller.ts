@@ -12,14 +12,16 @@ import { JoiValidationPipe } from 'src/pipes/joi.pipe';
 import { TodosStatusEnumService } from 'src/todos-status-enum/todos-status-enum.service';
 import {
   createTodoDto,
-  createTodoSchema,
   deleteTodoDto,
-  deleteTodoSchema,
   updateTodoDto,
-  updateTodoSchema,
   updateTodoStatusDto,
-  updateTodoStatusSchema,
 } from './dtos/todos.dto';
+import {
+  createTodoSchema,
+  deleteTodoSchema,
+  updateTodoSchema,
+  updateTodoStatusSchema,
+} from './dtos/todos.joi';
 import { TodosService } from './todos.service';
 
 @UseGuards(AuthGuard)
