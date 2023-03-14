@@ -22,20 +22,14 @@ export class TodosService {
 
   async getTodosDaily(status: string, startDate: string, endDate: string) {
     const dateArr = formatDateArray(startDate, endDate);
-    const whereObj =
-      status === 'created'
-        ? {
-            created_at: Between(
-              dayjs(startDate).toDate(),
-              dayjs(endDate).toDate(),
-            ),
-          }
-        : {
-            finished_at: Between(
-              dayjs(startDate).toDate(),
-              dayjs(endDate).toDate(),
-            ),
-          };
+    const checkingField = status === 'created' ? 'created_at' : 'finished_at';
+
+    const whereObj = {
+      [checkingField]: Between(
+        dayjs(startDate).startOf('day').toDate(),
+        dayjs(endDate).add(1, 'day').endOf('day').toDate(),
+      ),
+    };
     const todos = await this.todosRepository.find({
       relations: ['status'],
       where: {
@@ -52,8 +46,8 @@ export class TodosService {
           data: dateArr.reduce((acc, date) => {
             acc.push(
               todos.filter(
-                ({ created_at }) =>
-                  dayjs(created_at).format('YYYY-MM-DD') === date,
+                (item) =>
+                  dayjs(item[checkingField]).format('YYYY-MM-DD') === date,
               ).length,
             );
             return acc;
