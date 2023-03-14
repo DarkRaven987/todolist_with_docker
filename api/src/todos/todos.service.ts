@@ -68,7 +68,7 @@ export class TodosService {
 
   async deleteTodo(data: deleteTodoDto) {
     const result = await this.todosRepository.update(data.todoId, {
-      isDeleted: false,
+      isDeleted: true,
     });
     return result;
   }
