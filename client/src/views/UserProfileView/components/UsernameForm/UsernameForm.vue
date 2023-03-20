@@ -33,7 +33,7 @@ const debounceNameCheck = debounce(() => {
   if (username.value) {
     isLoadingUsernameCheck.value = true;
     authAgent
-      .post('/checkUsername', { username: username.value })
+      .post('/check-username', { username: username.value })
       .then(({ data }) => {
         showIsUniqueUsernameError.value = !data.isUnique;
       })

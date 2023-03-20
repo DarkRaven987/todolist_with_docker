@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function clearAllSessions() {
-    authAgent.get('/totalLogout').then(() => {
+    authAgent.get('/total-logout').then(() => {
       setUserData(null);
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', () => {
 
   function logoutExceptCurrent() {
     const refreshToken = localStorage.getItem('refreshToken');
-    authAgent.post('/logoutExceptCurrent', { refreshToken });
+    authAgent.post('/logout-except-current', { refreshToken });
   }
 
   onBeforeMount(() => {
@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', () => {
 
     if (refreshToken && accessToken) {
       authAgent
-        .post(`/validateSession`, {
+        .post(`/validate-session`, {
           jwt: refreshToken,
         })
         .then(({ data }) => {
