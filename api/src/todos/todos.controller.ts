@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/validateToken.guard';
 import { JoiValidationPipe } from 'src/pipes/joi.pipe';
-import { TodosStatusEnumService } from 'src/todos-status-enum/todos-status-enum.service';
 import {
   createTodoDto,
   deleteTodoDto,
@@ -27,37 +26,17 @@ import { TodosService } from './todos.service';
 @UseGuards(AuthGuard)
 @Controller('todos')
 export class TodosController {
-  constructor(
-    private readonly todosService: TodosService,
-    private readonly todosStatusEnumService: TodosStatusEnumService,
-  ) {}
+  constructor(private readonly todosService: TodosService) {}
 
   @Get()
   getTodos() {
     return this.todosService.getTodos();
   }
 
-  @Post('updateStatus')
+  @Post('update-status')
   @UsePipes(new JoiValidationPipe(updateTodoStatusSchema))
   async updateTodoStatus(@Body() data: updateTodoStatusDto) {
-    const currentStatus = await this.todosStatusEnumService.getById(
-      data.status,
-    );
-    let updateObj = {};
-    if (currentStatus.name === 'Done') {
-      updateObj = {
-        statusId: data.status,
-        finished_at: new Date(),
-      };
-    } else {
-      updateObj = {
-        statusId: data.status,
-      };
-    }
-    return this.todosService.updateTodoStatus({
-      todoId: data.todoId,
-      updateObj,
-    });
+    return this.todosService.updateTodoStatus(data);
   }
 
   @Post('create')
@@ -78,7 +57,7 @@ export class TodosController {
     return this.todosService.updateTodo(data);
   }
 
-  @Get('dailyCreated/:startDate/:endDate')
+  @Get('daily-created/:startDate/:endDate')
   getDailyCreatedTodos(
     @Param('startDate') startDate: string,
     @Param('endDate') endDate: string,
@@ -86,7 +65,7 @@ export class TodosController {
     return this.todosService.getTodosDaily('created', startDate, endDate);
   }
 
-  @Get('dailyDone/:startDate/:endDate')
+  @Get('daily-done/:startDate/:endDate')
   getDailyDoneTodos(
     @Param('startDate') startDate: string,
     @Param('endDate') endDate: string,
