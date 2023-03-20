@@ -2,15 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todos } from 'src/entities/todos.entity';
 import { Between, Repository } from 'typeorm';
-import { createTodoDto, deleteTodoDto, updateTodoDto } from './dtos/todos.dto';
+import {
+  createTodoDto,
+  deleteTodoDto,
+  updateTodoDto,
+  updateTodoStatusDto,
+} from './dtos/todos.dto';
 import { formatDateArray } from '../utils/index.js';
 import dayjs = require('dayjs');
+import { TodosStatusEnumService } from 'src/todos-status-enum/todos-status-enum.service';
 
 @Injectable()
 export class TodosService {
   constructor(
     @InjectRepository(Todos)
     private todosRepository: Repository<Todos>,
+    private readonly todosStatusEnumService: TodosStatusEnumService,
   ) {}
 
   getTodos() {
@@ -57,7 +64,19 @@ export class TodosService {
     };
   }
 
-  async updateTodoStatus({ todoId, updateObj }) {
+  async updateTodoStatus({ todoId, status }: updateTodoStatusDto) {
+    const currentStatus = await this.todosStatusEnumService.getById(status);
+    let updateObj = {};
+    if (currentStatus.name === 'Done') {
+      updateObj = {
+        statusId: status,
+        finished_at: new Date(),
+      };
+    } else {
+      updateObj = {
+        statusId: status,
+      };
+    }
     return this.todosRepository.update(todoId, updateObj);
   }
 

@@ -10,9 +10,9 @@ const series = ref([]);
 const loadChartData = async () => {
   const data = await apiAgent
     .get(
-      `/todos/dailyCreated/${dayjs(date.value[0]).format('YYYY-MM-DD')}/${dayjs(
-        date.value[1],
-      ).format('YYYY-MM-DD')}`,
+      `/todos/daily-created/${dayjs(date.value[0]).format(
+        'YYYY-MM-DD',
+      )}/${dayjs(date.value[1]).format('YYYY-MM-DD')}`,
     )
     .then(({ data }) => data);
 

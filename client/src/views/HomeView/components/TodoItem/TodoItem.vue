@@ -14,7 +14,7 @@ const todos = useTodosStore();
 
 const handleChangeStatus = (status) => {
   apiAgent
-    .post('/todos/updateStatus', {
+    .post('/todos/update-status', {
       todoId: props.todo.id,
       status: status.id,
     })

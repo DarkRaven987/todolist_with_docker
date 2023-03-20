@@ -50,14 +50,14 @@ export class AuthController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get('totalLogout')
+  @Get('total-logout')
   totalLogout(@Req() req: Request) {
     if (!req.user) throw new ForbiddenException();
     this.authService.totalLogout(req.user['sub']);
   }
 
   @UseGuards(AccessTokenGuard)
-  @Post('logoutExceptCurrent')
+  @Post('logout-except-current')
   logoutExceptCurrent(@Req() req: Request, @Body() body) {
     const authHeader = `${body.refreshToken}`.split(' ');
     if (!req.user || authHeader[0] !== 'Bearer' || !authHeader[1])
@@ -73,14 +73,14 @@ export class AuthController {
     return this.authService.refreshAccessToken(userId, refreshToken);
   }
 
-  @Post('checkUsername')
+  @Post('check-username')
   async checkUniqueUsername(@Body() data: checkUsernameDto) {
     const res = await this.userService.findByUsername(data.username);
     return { isUnique: !res };
   }
 
   @UseGuards(AccessTokenGuard)
-  @Post('validateSession')
+  @Post('validate-session')
   async validateSession(@Req() req: Request, @Body() data: ValidateDto) {
     const res = await this.authService.validateToken({
       userId: req.user['sub'],
