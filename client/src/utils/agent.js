@@ -6,7 +6,7 @@ const refreshAccessToken = () => {
   const requester = axios.create({
     baseURL: import.meta.env.VITE_AUTH_SERVICE_URL,
   });
-  return requester.get('/auth/refresh', {
+  return requester.get('/refresh', {
     headers: {
       Authorization: localStorage.getItem('refreshToken'),
     },
@@ -82,7 +82,7 @@ const getAgentInstance = (props = {}) => {
       ) {
         console.log('TOKEN ERROR: Clearing token data.');
         const refreshToken = localStorage.getItem('refreshToken');
-        await authAgent.post('/auth/logout', { refreshToken }).then(() => {
+        await authAgent.post('/logout', { refreshToken }).then(() => {
           localStorage.removeItem('user');
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');

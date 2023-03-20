@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', () => {
 
   function logout() {
     const refreshToken = localStorage.getItem('refreshToken');
-    authAgent.post('/auth/logout', { refreshToken }).then(() => {
+    authAgent.post('/logout', { refreshToken }).then(() => {
       setUserData(null);
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   function clearAllSessions() {
-    authAgent.get('/auth/totalLogout').then(() => {
+    authAgent.get('/totalLogout').then(() => {
       setUserData(null);
       localStorage.removeItem('user');
       localStorage.removeItem('accessToken');
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', () => {
 
   function logoutExceptCurrent() {
     const refreshToken = localStorage.getItem('refreshToken');
-    authAgent.post('/auth/logoutExceptCurrent', { refreshToken });
+    authAgent.post('/logoutExceptCurrent', { refreshToken });
   }
 
   onBeforeMount(() => {
@@ -43,7 +43,7 @@ export const useUserStore = defineStore('user', () => {
 
     if (refreshToken && accessToken) {
       authAgent
-        .post(`/auth/validateSession`, {
+        .post(`/validateSession`, {
           jwt: refreshToken,
         })
         .then(({ data }) => {

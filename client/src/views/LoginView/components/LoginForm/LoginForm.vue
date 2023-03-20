@@ -48,7 +48,7 @@ const handlePasswordChange = (event) => {
 const formSubmit = () => {
   if (username.value && password.value) {
     authAgent
-      .post('/auth/signin', {
+      .post('/signin', {
         username: username.value,
         password: password.value,
       })
