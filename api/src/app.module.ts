@@ -23,9 +23,6 @@ import { TodosModule } from './todos/todos.module';
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_NAME'),
           entities: entities,
-          migrations: ['dist/migrations/*{.ts,.js}'],
-          migrationsTableName: 'META_migrations',
-          migrationsRun: true,
           synchronize: false,
         };
       },

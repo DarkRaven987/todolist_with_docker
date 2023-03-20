@@ -28,6 +28,7 @@ services:
       - SERVICE_PORT=3001
       - AUTH_MICROSERVICE_HOST=auth
       - AUTH_MICROSERVICE_PORT=4002
+    command: 'npm run migrate'
 
   auth:
     container_name: 'todo_auth'
