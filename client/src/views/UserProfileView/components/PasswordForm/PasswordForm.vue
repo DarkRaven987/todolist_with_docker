@@ -1,12 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
-import FormInput from '../../../../components/FormInput/FormInput.vue';
+import { useStore } from 'vuex';
 import { authAgent } from '../../../../utils/agent';
 import { passwordRegExp } from '../../../../utils/consts';
-import { useUserStore } from '../../../../stores/user';
 import FormPasswordInput from '../../../../components/FormPasswordInput/FormPasswordInput.vue';
 
-const users = useUserStore();
+const store = useStore();
 
 const password = ref('');
 const confirmPassword = ref('');
@@ -41,11 +40,11 @@ const formSubmit = () => {
   if (isFormValid.value) {
     authAgent
       .patch('/users', {
-        userId: users.user.id,
+        userId: store.state.user.id,
         password: password.value,
       })
       .then(() => {
-        users.clearAllSessions();
+        store.dispatch('clearAllSessions');
       });
   }
 };

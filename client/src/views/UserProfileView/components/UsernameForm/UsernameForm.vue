@@ -1,11 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import debounce from 'lodash/debounce';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
 import { authAgent } from '../../../../utils/agent';
-import { useUserStore } from '../../../../stores/user';
 
-const users = useUserStore();
+const store = useStore();
 
 const username = ref('');
 const confirmUsername = ref('');
@@ -55,11 +55,11 @@ const formSubmit = () => {
   if (isFormValid.value) {
     authAgent
       .patch('/users', {
-        userId: users.user.id,
+        userId: store.state.user.id,
         username: username.value,
       })
       .then(() => {
-        users.clearAllSessions();
+        store.dispatch('clearAllSessions');
       });
   }
 };

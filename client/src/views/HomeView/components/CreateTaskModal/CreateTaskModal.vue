@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onBeforeMount, computed } from 'vue';
-import { useTodosStore } from '../../../../stores/todos';
+import { useStore } from 'vuex';
 import { apiAgent } from '../../../../utils/agent';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
 import FormTextArea from '../../../../components/FormTextArea/FormTextArea.vue';
@@ -10,7 +10,7 @@ const props = defineProps({
   todoToUpdate: Object,
 });
 
-const todos = useTodosStore();
+const store = useStore();
 
 const taskTitle = ref('');
 const taskDescription = ref('');
@@ -46,13 +46,13 @@ const handleSubmit = () => {
 
     apiAgent.post(url, data).then(() => {
       if (isEdit.value) {
-        todos.updateTodoItem({
+        store.dispatch('updateTodoItem', {
           ...props.todoToUpdate,
           title: taskTitle.value,
           description: taskDescription.value,
         });
       } else {
-        todos.loadTodosData();
+        store.dispatch('loadTodosData');
       }
       taskTitle.value = '';
       taskDescription.value = '';

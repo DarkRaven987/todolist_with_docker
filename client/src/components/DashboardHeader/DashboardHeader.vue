@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { useUserStore } from '../../stores/user';
 
 defineProps({
   title: String,
 });
 
-const users = useUserStore();
+const store = useStore();
 
 const router = useRouter();
 
@@ -41,7 +41,7 @@ const items = ref([
     title: 'Sign Out',
     icon: 'mdi-exit-to-app',
     value: 'sign_out',
-    onClick: () => users.logout(),
+    onClick: () => store.dispatch('logout'),
   },
 ]);
 </script>

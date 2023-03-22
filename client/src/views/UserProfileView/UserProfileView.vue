@@ -1,12 +1,12 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import UsernameForm from './components/UsernameForm/UsernameForm.vue';
 import PasswordForm from './components/PasswordForm/PasswordForm.vue';
 import DashboardHeader from '../../components/DashboardHeader/DashboardHeader.vue';
-import { useUserStore } from '../../stores/user';
 import UserIcon from './components/UserIcon/UserIcon.vue';
 
-const user = useUserStore();
+const store = useStore();
 
 const userEditMode = ref('');
 
@@ -16,7 +16,7 @@ const handleSelectEditMode = (val) => {
 };
 
 const closeOtherSessions = () => {
-  user.logoutExceptCurrent();
+  store.dispatch('logoutExceptCurrent');
 };
 
 const isUsernameFormDisplayed = computed(
@@ -49,7 +49,7 @@ const passwordButtonClass = computed(() => {
 
             <v-col class="user-content-col">
               <v-row class="user-name-label justify-space-between">
-                <span>{{ user.user?.username }}</span>
+                <span>{{ store.state.user?.username }}</span>
                 <v-btn @click="closeOtherSessions">Close other sessions</v-btn>
               </v-row>
 

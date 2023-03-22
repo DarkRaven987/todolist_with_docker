@@ -1,12 +1,12 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue';
-import { useTodosStore } from '../../stores/todos';
+import { useStore } from 'vuex';
 import CircleLoader from '../../components/CircleLoader/CircleLoader.vue';
 import DashboardHeader from '../../components/DashboardHeader/DashboardHeader.vue';
 import TodoItem from './components/TodoItem/TodoItem.vue';
 import CreateTaskModal from './components/CreateTaskModal/CreateTaskModal.vue';
 
-const todos = useTodosStore();
+const store = useStore();
 
 const showAddTaskModal = ref(false);
 const todoToUpdate = ref(null);
@@ -26,7 +26,7 @@ const toggleModal = () => {
 };
 
 onBeforeMount(() => {
-  todos.loadTodosData();
+  store.dispatch('loadTodosData');
 });
 </script>
 
@@ -59,7 +59,7 @@ onBeforeMount(() => {
         </div>
         <v-row class="todos-list-container justify-space-evenly">
           <TodoItem
-            v-for="(todo, i) in todos.todos"
+            v-for="(todo, i) in store.state.todos.todos"
             v-bind:key="todo.id"
             :todo="todo"
             :number="i + 1"
@@ -67,7 +67,7 @@ onBeforeMount(() => {
           />
         </v-row>
         <CircleLoader
-          :loading="todos.loadingData"
+          :loading="store.state.loadingData"
           class="page-loader"
           color="warning"
           width="6"
