@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import dayjs from 'dayjs';
-import { apiAgent } from '../utils/agent';
+import { apiAgent } from '../../utils/agent';
 
 export const useTodosStore = defineStore('todos', () => {
   const todos = ref([]);

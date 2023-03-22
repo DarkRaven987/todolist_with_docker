@@ -1,7 +1,7 @@
 import { ref, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { defineStore } from 'pinia';
-import { authAgent } from '../utils/agent';
+import { authAgent } from '../../utils/agent';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null);

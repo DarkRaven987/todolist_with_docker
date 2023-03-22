@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { useTodosStore } from '../../../../stores/todos';
+import { useStore } from 'vuex';
 import { apiAgent } from '../../../../utils/agent';
 import dayjs from 'dayjs';
 
@@ -10,7 +10,7 @@ const props = defineProps({
   onSelect: Function,
 });
 
-const todos = useTodosStore();
+const store = useStore();
 
 const handleChangeStatus = (status) => {
   apiAgent
@@ -20,7 +20,7 @@ const handleChangeStatus = (status) => {
     })
     .then(() => {
       const updatedTodo = { ...props.todo, status };
-      todos.updateTodoItem(updatedTodo);
+      store.dispatch('updateTodoItem', updatedTodo);
     });
 };
 
@@ -30,7 +30,7 @@ const handleDelete = () => {
       todoId: props.todo.id,
     })
     .then(() => {
-      todos.deleteTodoItem(props.todo.id);
+      store.dispatch('deleteTodoItem', props.todo.id);
     });
 };
 
@@ -43,7 +43,7 @@ const containerClasses = computed(
 );
 
 const statusesRow = computed(() => {
-  return todos.todosStatuses.map((item) => {
+  return store.state.todos.todosStatuses?.map((item) => {
     const state =
       item.id < props.todo.status.id
         ? 'passed'
@@ -81,7 +81,7 @@ const todoDate = computed(() => {
       {{ todo.description }}
     </v-row>
 
-    <v-row class="justify-space-between" v-if="todo.status.name === 'Done'">
+    <v-row class="justify-space-between" v-if="todo?.status?.name === 'Done'">
       <div class="status-label no-activity">Done!</div>
       <div class="status-label remove-label" @click="handleDelete">
         Remove task

@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import FormInput from '../../../../components/FormInput/FormInput.vue';
 import FormPasswordInput from '../../../../components/FormPasswordInput/FormPasswordInput.vue';
-import { useUserStore } from '../../../../stores/user';
 import { authAgent } from '../../../../utils/agent';
 import { AUTH_FORM, passwordRegExp } from '../../../../utils/consts';
 
@@ -11,7 +11,7 @@ defineProps({
   handleFormChange: Function,
 });
 
-const userStore = useUserStore();
+const store = useStore();
 const router = useRouter();
 
 const username = ref('');
@@ -53,7 +53,7 @@ const formSubmit = () => {
         password: password.value,
       })
       .then(({ data }) => {
-        userStore.setUserData(data?.user);
+        store.dispatch('setUser', data?.user);
         localStorage.setItem('user', JSON.stringify(data?.user));
         localStorage.setItem('accessToken', `Bearer ${data.accessToken}`);
         localStorage.setItem('refreshToken', `Bearer ${data.refreshToken}`);

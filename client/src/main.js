@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { createPinia } from 'pinia';
+// import { createPinia } from 'pinia';
 import { createVuetify } from 'vuetify';
 import 'vuetify/styles';
 import * as components from 'vuetify/components';
@@ -9,6 +9,7 @@ import '@mdi/font/css/materialdesignicons.css';
 import VueApexCharts from 'vue3-apexcharts';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import store from './stores/vuex';
 
 import App from './App.vue';
 import router from './router';
@@ -32,7 +33,8 @@ const vuetify = createVuetify({
 app.component('VueDatePicker', VueDatePicker);
 app.use(VueApexCharts);
 app.use(vuetify);
-app.use(createPinia());
+// app.use(createPinia());
+app.use(store);
 app.use(router);
 
 app.mount('#app');
